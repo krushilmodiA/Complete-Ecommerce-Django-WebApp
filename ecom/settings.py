@@ -10,6 +10,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # load environment variable
 load_dotenv()
 
+
+# password db
+DB_PASSWORD = os.environ['DB_PASSWORD']
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
@@ -82,7 +87,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'railway',
         'USER': 'postgres',
-        'PASSWORD': os.environ['DB_PASSWORD'],
+        'PASSWORD': DB_PASSWORD,
         'HOST': 'roundhouse.proxy.rlwy.net',
         'PORT': '53152',
     }
