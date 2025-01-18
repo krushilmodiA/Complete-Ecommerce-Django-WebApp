@@ -1,0 +1,27 @@
+(1) session :--> appname(cart) -> cart.py --> context_porcessors.py --> appname(ecom) -> settings.py 
+   
+   --> First, go to the localserver http://127.0.0.1:8000/ or runserver then, go inside the incpect.
+        After that, find (application) then underneath (cookie) and inside there would (session value) copy it.
+
+   --> Now, open project's vscode terminal.
+        write -> python manage.py shell -> from django.contrib.sessions.models import Session 
+              -> session_k = Session.objects.get(pk = session_k)
+              -> session_k.get_decoded()
+    
+    
+    session complete.
+
+
+(2) add to cart :--> appname(store) -> base.html -> paste jquary cdn script -> product.html -> add to cart button 
+                      -> ajax code in product.html.
+                     
+                >--> appname(cart) --> cart.py --> context_processors.py -> view.py(function name cart_add) 
+                         -> urls.py -> views.cart_add.
+
+
+
+(3) Add more models like(address, name,ect) in in-build django User models.
+
+--> appname(store) -> models.py -> (Profile).
+
+-->admin.py --> start code from --> # ----User model perameter inline ----

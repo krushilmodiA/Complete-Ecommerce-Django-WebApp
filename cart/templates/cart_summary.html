@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+{% block content %}
+<!-- Header-->
+<header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">cart Products</h1>
+            <p class="lead fw-normal text-white-50 mb-0">With this shop cart template</p>
+        </div>
+    </div>
+</header>
+<br><br><br><br><br>
+{% if cart_products %}
+    {% for product in cart_products %}
+<div class="container">
+    <div class="card mb-2">
+    <img src="{{ product.image.url }}" class="card-img-top" alt="..." width="150" height="150">
+    <div class="card-body">
+          <h5 class="card-title">{{ product.name }}</h5>
+          <p class="card-text">{{ product.description }}</p>
+          {% if product.is_sale %}
+          <div class="d-flex justify-content-center small text-warning mb-2">
+            <div class="bi-star-fill"></div>
+            <div class="bi-star-fill"></div>
+            <div class="">-sale-</div>
+            <div class="bi-star-fill"></div>
+            <div class="bi-star-fill"></div>
+        </div>
+        <!-- Product price-->
+        <span class="text-muted text-decoration-line-through">${{ product.price }}</span>
+        ${{ product.sale_price }}
+        Id : {{ product.id }}
+          {% else %}
+          <p class="card-text"><small class="text-muted">{{ product.price }}</small></p>
+          Id : {{ product.id }}
+          {% endif %}
+          <br><br>
+          <div class = "row justify-content-center">  
+            <div class = "col-md-2">Quantity:</div>
+            <div class = "col-md-2">
+
+                <!-- product quantities in cart -->
+          <select class="form-select form-select sm" id = "select{{product.id}}" aria-label="Default select example">
+                {% for key, value in quantities.items %}
+                    {% if key == product.id|slugify %}
+            <option selected>{{ value }}</option>
+                    {% endif %}
+                {% endfor %}
+            
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+
+          </select>
+        </div>
+        <br><br> 
+        <div> 
+        <a href="{% url 'home' %}" class="btn btn-secondary">Home</a>
+      </div>
+      <!-- update product selection list inside the cart. -->
+        <br><br>
+      <div><button type="button" data-index = "{{product.id}}"class = "btn btn-secondary update-cart">Update</button></div>
+        <br><br>
+        <!-- delete product from cart -->
+        <div>
+        <button type="button" data-index = "{{product.id}}"class = "btn btn-danger delete-product">Remove</button>
+      </div>
+      </div>
+          
+        </div>
+        
+        <br>
+      </div>
+</div>
+<br><br> 
+
+{% endfor %}
+<div class="right">
+  <br>
+  <h3>Total: ${{ totals }}</h3>
+  <br>
+  <a href="{% url 'checkout' %}" class="btn btn-success">Checkout</a>
+  <br><br>
+</div>
+
+
+{% else %}
+<br><br><br>
+<h1>There is not any item.</h1>
+<br><br><br>
+{% endif %}    
+
+<script>
+  // update cart items
+  // check if button pressed.
+  $(document).on('click', '.update-cart', function(e){
+    e.preventDefault();
+    // grab the product id.
+    let productid = $(this).data('index');
+    
+    //print console message for check id and quantity is going to be pass or not? 
+    // console.log(productid)
+    // console.log($('#select' + productid + ' option:selected').text())
+    
+    $.ajax({
+        type: 'POST',
+        url: "{% url 'cart_update' %}",
+        data: {
+            product_id: $(this).data('index'),
+            product_qty: $('#select' + productid + ' option:selected').text(), // #<!-- product quantities in cart -->
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+            action: 'post'  
+          },
+
+          success: function(json){
+            console.log(json);
+            
+            //  update quantity using update button in cart.and the (id) is (select{{product.id}}) in add to cart select option.  
+              location.reload(); 
+          },
+
+          error: function(xhr, errmsg, err){
+
+          }
+    });
+
+
+  })
+
+
+// delete items in cart
+  // check if button pressed.
+  $(document).on('click', '.delete-product', function(e){
+    e.preventDefault();
+    
+    //print console message for check id and quantity is going to be pass or not? 
+    // console.log(productid)
+    // console.log($('#select' + productid + ' option:selected').text())
+    
+    $.ajax({
+        type: 'POST',
+        url: "{% url 'cart_delete' %}",
+        data: {
+            product_id: $(this).data('index'),
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+            action: 'post'  
+          },
+
+          success: function(json){
+            console.log(json);
+            
+            //  update quantity using update button in cart.and the (id) is (select{{product.id}}) in add to cart select option.  
+              location.reload(); 
+          },
+
+          error: function(xhr, errmsg, err){
+
+          }
+    });
+
+
+  })
+</script>
+
+{% endblock %}  

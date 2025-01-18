@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Update Info page </h1>
+            <p class="lead fw-normal text-white-50 mb-0">Update user profile info</p>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <div class="row">
+        <center>
+            <div class="col-8">
+                <br><br>
+                <strong> Billing Information</strong>
+                <br><br> 
+                <form method="post" action="{% url 'update_info' %}">
+                    {% csrf_token %}
+                    
+                    <!-- this is dajngo form data.in order to user can register and login -->
+                    {{ form.as_p }}
+                    <br><br>
+                    <strong>Shipping Information</strong>
+                    <br/><br/>
+                    
+                    {{ shipping_form.as_p }}
+                
+                    <br/><br/>
+                    <button type="submit" class="btn btn-primary">Update Info</button>
+                    <br><br>
+                </form>
+            </div>
+        </center>
+    </div>
+</div> 
+
+{% endblock %}

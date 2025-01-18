@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container">
+    <br><br>
+    <div class="card">
+        <div class="card-header">
+          Order {{ order.id }} - ${{ order.amount_paid }} 
+        </div>
+        <div class="card-body">
+          Email: {{ order.email }}<br>
+          {% if order.date_shipped %}
+          Date Shipped: {{ order.date_shipped }}<br> 
+          {% else %}
+          Date Ordered: {{ order.date_ordered }}<br>
+          {% endif %}
+          <br>
+          Full Name: {{ order.full_name }}<br>
+          
+          shipping Address: {{ order.shipping_address }}<br>
+        
+          {% for item in items %}
+             {{item.quantity}} - {{item.product}} - {{item.price}}<br>
+          {% endfor %}
+        <br>
+          <!-- order button for shipped or not? -->
+           {% if not order.shipped %}
+           <!-- if order is not shipped and want to shipped.  -->
+            <form method="POST">
+                {% csrf_token %}
+                <input type="hidden" name = "shipping_status" value="true">
+                <button type="submit" class="btn btn-success">Mark As Shipped</button>
+            </form>
+           {% else %}
+           <!-- if order is shipped and want to un-shipped.  -->
+           <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name = "shipping_status" value="false">
+            <button type="submit" class="btn btn-danger">Mark As Not Shipped</button>
+        </form>
+        {% endif %}
+        </div>
+      </div>
+      <br><br>
+</div>
+
+{% endblock %}  
